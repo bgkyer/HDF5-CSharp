@@ -1,5 +1,5 @@
-using HDF.PInvoke;
-using Tensorflow.Keras.HDF5.DataTypes;
+﻿using HDF.PInvoke;
+using HDF5CSharp.DataTypes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace Tensorflow.Keras.HDF5
+namespace HDF5CSharp
 {
     public static partial class Hdf5
     {
@@ -104,33 +104,29 @@ namespace Tensorflow.Keras.HDF5
             T result = (T)attrs.result.GetValue(first);
             return result;
         }
-        public static bool IsAttr(long groupId, string name, string alternativeName)
+
+        public static (bool success, IEnumerable<string>) ReadStringAttributes(long groupId, string name, string alternativeName)
         {
+
+            long datatype = H5T.create(H5T.class_t.STRING, H5T.VARIABLE);
+            H5T.set_cset(datatype, H5T.cset_t.UTF8);
+            H5T.set_strpad(datatype, H5T.str_t.NULLTERM);
             var nameToUse = Hdf5Utils.GetRealAttributeName(groupId, name, alternativeName);
-            if (!nameToUse.valid)
-            {
-                return false;
-            }
-            return true;
-        }
-        public static (bool success, string[]) ReadStringAttributes(long groupId, string name, string alternativeName)
-        {
-            var nameToUse = Hdf5Utils.GetRealAttributeName(groupId, name, alternativeName);
-            var strs = new List<string>();
             if (!nameToUse.valid)
             {
                 Hdf5Utils.LogError?.Invoke($"Error reading {groupId}. Name:{name}. AlternativeName:{alternativeName}");
-                return (false, null);
+                return (false, Array.Empty<string>());
             }
             var datasetId = H5A.open(groupId, nameToUse.name);
-            
-            long typeId = H5A.get_type(datasetId);
             long spaceId = H5A.get_space(datasetId);
             long count = H5S.get_simple_extent_npoints(spaceId);
             H5S.close(spaceId);
+
             IntPtr[] rdata = new IntPtr[count];
             GCHandle hnd = GCHandle.Alloc(rdata, GCHandleType.Pinned);
-            H5A.read(datasetId, typeId, hnd.AddrOfPinnedObject());
+            H5A.read(datasetId, datatype, hnd.AddrOfPinnedObject());
+
+            var strs = new List<string>();
             for (int i = 0; i < rdata.Length; ++i)
             {
                 int len = 0;
@@ -145,9 +141,9 @@ namespace Tensorflow.Keras.HDF5
             }
 
             hnd.Free();
-            H5T.close(typeId);
+            H5T.close(datatype);
             H5A.close(datasetId);
-            return (true, strs.ToArray());
+            return (true, strs);
         }
 
         public static (bool success, Array result) ReadPrimitiveAttributes<T>(long groupId, string name, string alternativeName) //where T : struct
@@ -214,10 +210,10 @@ namespace Tensorflow.Keras.HDF5
 
             }
 
-            // create encoded attributes
+            // create UTF-8 encoded attributes
             long datatype = H5T.create(H5T.class_t.STRING, H5T.VARIABLE);
-            H5T.set_cset(datatype, H5T.cset_t.ASCII);
-            H5T.set_strpad(datatype, H5T.str_t.NULLTERM);
+            H5T.set_cset(datatype, H5T.cset_t.UTF8);
+            H5T.set_strpad(datatype, H5T.str_t.SPACEPAD);
 
             int strSz = values.Count();
             long spaceId = H5S.create_simple(1, new[] { (ulong)strSz }, null);
