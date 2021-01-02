@@ -8,26 +8,25 @@
 		<DelaySign>false</DelaySign>
 		<AssemblyOriginatorKeyFile>Hdf5DotNetTools.snk</AssemblyOriginatorKeyFile>
 		<Platforms>AnyCPU;x86;x64</Platforms>
-		<PackageId>HDF5-CSharp</PackageId>
-		<Authors>LiorBanai</Authors>
-		<Company>LiorBanai</Company>
-		<Product>HDF5-CSharp</Product>
+		<PackageId>SciSharp.Keras.HDF5</PackageId>
+		<Authors>SciSharp STACK</Authors>
+		<Company></Company>
+		<Product>SciSharp.Keras.HDF5</Product>
 		<Description>C# Wrapper for HDF.PInvoke Library</Description>
-		<Copyright>Lior Banai @ 2020</Copyright>
+		<Copyright>Apache 2.0, SciSharp STACK @2021</Copyright>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
-		<PackageProjectUrl>https://github.com/LiorBanai/HDF5-CSharp</PackageProjectUrl>
-		<PackageIcon>hdf5Wrapper.png</PackageIcon>
-		<PackageIconUrl />
-		<RepositoryUrl>https://github.com/LiorBanai/HDF5-CSharp</RepositoryUrl>
+		<PackageProjectUrl>https://github.com/SciSharp/HDF5-CSharp</PackageProjectUrl>
+    <PackageIconUrl>https://avatars3.githubusercontent.com/u/44989469?s=200&amp;v=4</PackageIconUrl>
+		<RepositoryUrl>https://github.com/SciSharp/HDF5-CSharp</RepositoryUrl>
 		<RepositoryType>git</RepositoryType>
-		<PackageReleaseNotes>- Add Support for older objects for ReadObject method (#73).</PackageReleaseNotes>
+		<PackageReleaseNotes>Dependents on HDF.PInvoke.1.10.500</PackageReleaseNotes>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<Version>1.11.1.0</Version>
+		<Version>1.1.10.500</Version>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
-		<IncludeSymbols>true</IncludeSymbols>
-		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
-		<ApplicationIcon>hdf5Wrapper.ico</ApplicationIcon>
-		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<IncludeSymbols>false</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<ApplicationIcon></ApplicationIcon>
+		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
 	</PropertyGroup>
 
@@ -66,13 +65,6 @@
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 		<PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<None Include="..\hdf5Wrapper.png">
-			<Pack>True</Pack>
-			<PackagePath></PackagePath>
-		</None>
 	</ItemGroup>
 
 	<ItemGroup>
